@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login | Brew Haven</title>
+
+<link rel="stylesheet" href="css/login.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <h2>☕ Brew Haven</h2>
+        <p class="subtitle">Welcome back!</p>
+
+        <form onsubmit="loginUser(event)">
+
+            <input 
+                type="email" 
+                id="loginEmail" 
+                placeholder="Enter Gmail (example@gmail.com)" 
+                pattern=".+@gmail.com"
+                required
+            >
+
+            <input 
+                type="password" 
+                id="loginPassword" 
+                placeholder="Enter password" 
+                required
+            >
+
+            <button type="submit">Login</button>
+
+        </form>
+
+        <p class="switch">
+            Don't have an account? 
+            <a href="register.html">Register</a>
+        </p>
+
+    </div>
+</div>
+
+<script src="js/auth.js"></script>
+
+</body>
+</html>

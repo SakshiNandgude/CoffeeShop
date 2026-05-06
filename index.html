@@ -6,30 +6,128 @@
 <title>Brew Haven Coffee</title>
 
 <link rel="stylesheet" href="css/style.css">
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
-<!-- 🔐 PROTECT PAGE -->
-<script>
-    const userId = localStorage.getItem("user_id");
+<style>
 
-    if (!userId) {
-        alert("Please login first!");
-        window.location.href = "login.html";
-    }
-</script>
+/* 🔥 GLOBAL */
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* 🔥 TOP BAR (SEARCH + FILTERS) */
+.top-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 25px auto;
+    flex-wrap: wrap;
+}
+
+/* SEARCH */
+#search {
+    width: 280px;
+    padding: 10px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+/* DROPDOWN */
+#size {
+    padding: 8px;
+    border-radius: 10px;
+}
+
+/* CHECKBOX */
+.top-bar label {
+    font-size: 14px;
+}
+
+/* MENU GRID */
+.menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    padding: 20px;
+}
+
+/* CARD */
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    background: white;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* IMAGE */
+.card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+/* TEXT */
+.card h4 {
+    margin: 10px;
+}
+
+.card span {
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+/* BUTTON */
+.card button {
+    margin: 10px;
+    width: 90%;
+    padding: 8px;
+    background: #6f4e37;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* USER */
+.user-info {
+    color: white;
+    font-weight: 500;
+}
+
+.logout-btn {
+    cursor: pointer;
+}
+
+</style>
 
 </head>
 
 <body>
+
+<!-- 🔐 PROTECT PAGE -->
+<script>
+    const userId = localStorage.getItem("user_id");
+    const userName = localStorage.getItem("user_name");
+
+    if (!userId || !userName) {
+        alert("Please login first!");
+        window.location.href = "login.html";
+    }
+</script>
 
 <!-- NAVBAR -->
 <nav class="navbar">
     <div class="nav-container">
         <h2 class="logo">☕ Brew Haven</h2>
 
-        <!-- 👤 USER INFO -->
-        <div style="color:white; font-weight:500;">
+        <div class="user-info">
             Welcome, <span id="username"></span>
         </div>
 
@@ -38,7 +136,7 @@
             <li><a href="#menu">Menu</a></li>
             <li><a href="#cart">Cart (<span id="cart-count">0</span>)</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li><button onclick="logout()" style="cursor:pointer;">Logout</button></li>
+            <li><button onclick="logout()" class="logout-btn">Logout</button></li>
         </ul>
     </div>
 </nav>
@@ -54,109 +152,123 @@
 
 <!-- MENU -->
 <section id="menu">
-    <h2>Our Coffee Menu</h2>
+    <h2 style="text-align:center;">Our Coffee Menu</h2>
+
+    <!-- 🔥 NEW PROFESSIONAL TOP BAR -->
+    <div class="top-bar">
+        <input type="text" id="search" placeholder="Search coffee...">
+
+        <select id="size">
+            <option value="Small">Small</option>
+            <option value="Medium">Medium (+20)</option>
+            <option value="Large">Large (+40)</option>
+        </select>
+
+        <label><input type="checkbox" value="Milk"> Milk (+10)</label>
+        <label><input type="checkbox" value="Sugar"> Sugar (+5)</label>
+    </div>
 
     <div class="menu">
 
+        <!-- CARDS -->
         <div class="card">
-            <img src="https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg">
+            <img src="https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg" alt="Espresso">
             <h4>Espresso</h4><span>₹120</span>
             <button onclick="addToCart('Espresso',120)">Order</button>
         </div>
 
         <div class="card">
-             <img src="https://images.unsplash.com/photo-1686794154262-c8aa45e85848?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGF6ZWwlMjBjb2ZmZWV8ZW58MHx8MHx8fDA%3D">
-             <h4>Hazelnut Coffee</h4><span>₹210</span>
-             <button onclick="addToCart('Hazelnut Coffee',210)">Order</button>
+            <img src="https://images.unsplash.com/photo-1686794154262-c8aa45e85848" alt="Hazelnut Coffee">
+            <h4>Hazelnut Coffee</h4><span>₹210</span>
+            <button onclick="addToCart('Hazelnut Coffee',210)">Order</button>
         </div>
 
         <div class="card">
-             <img src="https://plus.unsplash.com/premium_photo-1669687924558-386bff1a0469?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8aXJpc2glMjBjb2ZmZWV8ZW58MHx8MHx8fDA%3D">
-             <h4>Irish Coffee</h4><span>₹250</span>
-             <button onclick="addToCart('Irish Coffee',250)">Order</button>
+            <img src="https://plus.unsplash.com/premium_photo-1669687924558-386bff1a0469" alt="Irish Coffee">
+            <h4>Irish Coffee</h4><span>₹250</span>
+            <button onclick="addToCart('Irish Coffee',250)">Order</button>
         </div>
 
         <div class="card">
-              <img src="https://images.unsplash.com/photo-1586788680434-30d324b2d46f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmVkJTIwdmVsdmV0JTIwY2FrZXxlbnwwfHwwfHx8MA%3D%3D">
-              <h4>Red Velvet Cake</h4><span>₹220</span>
-              <button onclick="addToCart('Red Velvet Cake',220)">Order</button>
+            <img src="https://images.unsplash.com/photo-1586788680434-30d324b2d46f" alt="Red Velvet Cake">
+            <h4>Red Velvet Cake</h4><span>₹220</span>
+            <button onclick="addToCart('Red Velvet Cake',220)">Order</button>
         </div>
 
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1637178035222-a08f2d4dd1a3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Y2FyYW1lbCUyMGxhdHRlfGVufDB8fDB8fHww">
+            <img src="https://images.unsplash.com/photo-1637178035222-a08f2d4dd1a3" alt="Caramel Latte">
             <h4>Caramel Latte</h4><span>₹200</span>
             <button onclick="addToCart('Caramel Latte',200)">Order</button>
         </div>
 
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1639744211487-b27e3551b07c?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+            <img src="https://images.unsplash.com/photo-1639744211487-b27e3551b07c" alt="Tiramisu">
             <h4>Tiramisu</h4><span>₹260</span>
             <button onclick="addToCart('Tiramisu',260)">Order</button>
         </div>
 
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZG9udXRzfGVufDB8fDB8fHww">
+            <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b" alt="Donuts">
             <h4>Donuts</h4><span>₹120</span>
             <button onclick="addToCart('Donuts',120)">Order</button>
         </div>
 
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1580661869408-55ab23f2ca6e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YW1lcmljYW5vfGVufDB8fDB8fHww">
+            <img src="https://images.unsplash.com/photo-1580661869408-55ab23f2ca6e" alt="Americano">
             <h4>Americano</h4><span>₹150</span>
             <button onclick="addToCart('Americano',150)">Order</button>
         </div>
 
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1626595444746-59219e6838ac?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8dmFuaWxsYSUyMGxhdHRlfGVufDB8fDB8fHww">
+            <img src="https://images.unsplash.com/photo-1626595444746-59219e6838ac" alt="Vanilla Latte">
             <h4>Vanilla Latte</h4><span>₹190</span>
             <button onclick="addToCart('Vanilla Latte',190)">Order</button>
         </div>
 
-
         <div class="card">
-            <img src="https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg">
+            <img src="https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg" alt="Cappuccino">
             <h4>Cappuccino</h4><span>₹180</span>
             <button onclick="addToCart('Cappuccino',180)">Order</button>
         </div>
 
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5">
+            <img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5" alt="Flat White">
             <h4>Flat White</h4><span>₹210</span>
             <button onclick="addToCart('Flat White',210)">Order</button>
         </div>
 
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735">
+            <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735" alt="Iced Latte">
             <h4>Iced Latte</h4><span>₹220</span>
             <button onclick="addToCart('Iced Latte',220)">Order</button>
         </div>
 
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699">
+            <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699" alt="Cold Coffee">
             <h4>Cold Coffee</h4><span>₹180</span>
             <button onclick="addToCart('Cold Coffee',180)">Order</button>
         </div>
 
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1577805947697-89e18249d767">
+            <img src="https://images.unsplash.com/photo-1577805947697-89e18249d767" alt="Frappuccino">
             <h4>Frappuccino</h4><span>₹260</span>
             <button onclick="addToCart('Frappuccino',260)">Order</button>
         </div>
 
         <div class="card">
-            <img src="https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg">
+            <img src="https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg" alt="Chocolate Cake">
             <h4>Chocolate Cake</h4><span>₹150</span>
             <button onclick="addToCart('Chocolate Cake',150)">Order</button>
         </div>
 
         <div class="card">
-            <img src="https://images.pexels.com/photos/1126359/pexels-photo-1126359.jpeg">
+            <img src="https://images.pexels.com/photos/1126359/pexels-photo-1126359.jpeg" alt="Cheesecake">
             <h4>Cheesecake</h4><span>₹180</span>
             <button onclick="addToCart('Cheesecake',180)">Order</button>
         </div>
 
         <div class="card">
-            <img src="https://images.pexels.com/photos/2135/food-france-morning-breakfast.jpg">
+            <img src="https://images.pexels.com/photos/2135/food-france-morning-breakfast.jpg" alt="Croissant">
             <h4>Croissant</h4><span>₹120</span>
             <button onclick="addToCart('Croissant',120)">Order</button>
         </div>
@@ -178,9 +290,9 @@
     <p>Email: brewhaven@gmail.com</p>
     <p>Phone: +91 9876543210</p>
 
-    <input type="text" placeholder="Your Name"><br><br>
-    <input type="email" placeholder="Your Email"><br><br>
-    <textarea placeholder="Your Message"></textarea><br><br>
+    <input type="text" id="cname" placeholder="Your Name"><br><br>
+    <input type="email" id="cemail" placeholder="Your Email"><br><br>
+    <textarea id="cmsg" placeholder="Your Message"></textarea><br><br>
 
     <button class="btn" onclick="submitForm()">Send Message</button>
 </section>
@@ -191,15 +303,30 @@
 
 <script src="js/script.js"></script>
 
-<!-- 👇 USER NAME + LOGOUT SCRIPT -->
 <script>
+document.addEventListener("DOMContentLoaded", function() {
     const name = localStorage.getItem("user_name");
-    document.getElementById("username").innerText = name || "User";
+    document.getElementById("username").innerText =
+        name && name !== "null" ? name : "User";
+});
 
-    function logout() {
-        localStorage.clear();
-        window.location.href = "login.html";
+function logout() {
+    localStorage.clear();
+    window.location.href = "login.html";
+}
+
+function submitForm() {
+    const name = document.getElementById("cname").value;
+    const email = document.getElementById("cemail").value;
+    const msg = document.getElementById("cmsg").value;
+
+    if (!name || !email || !msg) {
+        alert("Please fill all fields!");
+        return;
     }
+
+    alert("Message sent successfully!");
+}
 </script>
 
 </body>

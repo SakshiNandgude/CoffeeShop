@@ -1,3 +1,4 @@
+// ================= LOGIN =================
 function loginUser(event) {
     event.preventDefault();
 
@@ -13,34 +14,37 @@ function loginUser(event) {
     })
     .then(res => res.json())
     .then(data => {
-        console.log("LOGIN RESPONSE:", data);
+        console.log(data);
 
-        // ❌ invalid login
         if (!data.user_id) {
-            alert(data.message || "Invalid login");
+            alert(data.message);
             return;
         }
 
-        // ✅ store user
         localStorage.setItem("user_id", data.user_id);
         localStorage.setItem("user_name", data.name);
 
-        // ✅ redirect
+        alert("Login successful!");
         window.location.href = "index.html";
     })
-    .catch(err => {
-        console.error(err);
-        alert("Server error. Check backend.");
+    .catch(() => {
+        alert("Server not working");
     });
 }
 
 
+// ================= REGISTER =================
 function registerUser(event) {
     event.preventDefault();
 
     const name = document.getElementById("registerName").value;
     const email = document.getElementById("registerEmail").value;
     const password = document.getElementById("registerPassword").value;
+
+    if (!name || !email || !password) {
+        alert("Please fill all fields!");
+        return;
+    }
 
     fetch("http://localhost:5000/register", {
         method: "POST",
@@ -53,13 +57,18 @@ function registerUser(event) {
     .then(data => {
         console.log("REGISTER RESPONSE:", data);
 
-        alert("Registered successfully!");
+        // ❌ registration failed
+        if (data.message !== "User registered successfully") {
+            alert(data.message || "Registration failed");
+            return;
+        }
 
-        // ✅ redirect to login
+        // ✅ success
+        alert("Registration successful!");
         window.location.href = "login.html";
     })
     .catch(err => {
-        console.error(err);
-        alert("Registration failed");
+        console.error("REGISTER ERROR:", err);
+        alert("Registration failed. Check backend.");
     });
 }

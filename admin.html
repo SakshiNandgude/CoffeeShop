@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Panel</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f5f5f5;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+/* FORM */
+.form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+button {
+    padding: 10px 15px;
+    background: #6f4e37;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* LIST */
+ul {
+    max-width: 400px;
+    margin: auto;
+}
+
+li {
+    background: white;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🛠 Admin Panel</h1>
+
+<div class="form">
+    <input type="text" id="name" placeholder="Item Name">
+    <input type="number" id="price" placeholder="Price">
+    <button onclick="addItem()">Add</button>
+</div>
+
+<ul id="menu"></ul>
+
+<script>
+
+function loadMenu() {
+    let menu = JSON.parse(localStorage.getItem("menu")) || [];
+    let ul = document.getElementById("menu");
+
+    ul.innerHTML = "";
+
+    menu.forEach((item, index) => {
+        ul.innerHTML += `
+            <li>
+                ${item.name} - ₹${item.price}
+                <button onclick="deleteItem(${index})">❌</button>
+            </li>
+        `;
+    });
+}
+
+function addItem() {
+    let name = document.getElementById("name").value;
+    let price = document.getElementById("price").value;
+
+    if (!name || !price) return alert("Fill all fields");
+
+    let menu = JSON.parse(localStorage.getItem("menu")) || [];
+
+    menu.push({ name, price });
+
+    localStorage.setItem("menu", JSON.stringify(menu));
+
+    loadMenu();
+}
+
+function deleteItem(index) {
+    let menu = JSON.parse(localStorage.getItem("menu")) || [];
+
+    menu.splice(index, 1);
+
+    localStorage.setItem("menu", JSON.stringify(menu));
+
+    loadMenu();
+}
+
+loadMenu();
+
+</script>
+
+</body>
+</html>

@@ -13,79 +13,104 @@ body {
     align-items: center;
 }
 
+/* Container */
 .container {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 20px;
 }
 
+/* Card */
 .card {
-    background: #fff;
+    background: #ffffff;
     padding: 40px 30px;
-    border-radius: 12px;
-    width: 350px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 380px;
+    margin: auto;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    animation: fadeIn 0.6s ease-in-out;
 }
 
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Title */
 .card h2 {
     margin-bottom: 10px;
     color: #3e2723;
+    font-weight: 600;
 }
 
+/* Subtitle */
 .subtitle {
     font-size: 14px;
     color: #777;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
+/* Inputs */
 input {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     outline: none;
+    transition: 0.3s;
+    font-size: 14px;
 }
 
+/* Input Focus Effect */
 input:focus {
     border-color: #795548;
+    box-shadow: 0 0 8px rgba(121, 85, 72, 0.3);
 }
 
+/* Button */
 button {
     width: 100%;
-    padding: 10px;
-    margin-top: 10px;
+    padding: 12px;
+    margin-top: 15px;
     border: none;
-    border-radius: 6px;
-    background: #3e2723;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #3e2723, #5d4037);
     color: white;
     font-weight: 500;
     cursor: pointer;
     transition: 0.3s;
 }
 
+/* Button Hover */
 button:hover {
-    background: #5d4037;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
+/* Secondary Button */
 .secondary {
-    background: #795548;
+    background: linear-gradient(135deg, #795548, #8d6e63);
 }
 
-.secondary:hover {
-    background: #8d6e63;
-}
-
+/* Divider */
 .divider {
     margin: 15px 0;
     font-size: 12px;
     color: #aaa;
 }
 
+/* Switch */
 .switch {
-    margin-top: 15px;
+    margin-top: 20px;
     font-size: 13px;
 }
 
@@ -97,4 +122,11 @@ button:hover {
 
 .switch a:hover {
     text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .card {
+        padding: 30px 20px;
+    }
 }

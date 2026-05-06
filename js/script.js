@@ -10,6 +10,9 @@ window.onload = function () {
     if (name) {
         document.getElementById("username").innerText = "Hi, " + name;
     }
+
+    // 👉 Initialize search after page loads
+    initSearch();
 };
 
 /* ================= LOGOUT ================= */
@@ -50,16 +53,34 @@ function showToast(message) {
 let cart = [];
 
 function addToCart(name, price) {
-    const existingItem = cart.find(item => item.name === name);
+
+    let selectedSize = "Large";
+    let selectedExtras = ["Milk", "Sugar"];
+
+    let sizePrice = selectedSize === "Large" ? 30 : 0;
+    let extrasPrice = selectedExtras.length * 10;
+
+    const existingItem = cart.find(item =>
+        item.name === name &&
+        item.size === selectedSize
+    );
 
     if (existingItem) {
         existingItem.quantity++;
     } else {
-        cart.push({ name, price, quantity: 1 });
+        cart.push({
+            name,
+            price,
+            quantity: 1,
+            size: selectedSize,
+            sizePrice: sizePrice,
+            extras: selectedExtras,
+            extrasPrice: extrasPrice
+        });
     }
 
     displayCart();
-    showToast(`${name} added to cart 🛒`);
+    showToast(`${name} (${selectedSize}) added 🛒`);
 }
 
 function increaseQty(index) {
@@ -76,30 +97,53 @@ function decreaseQty(index) {
     displayCart();
 }
 
-function displayCart() {
+/* ================= DISPLAY CART ================= */
+
+function displayCart(filteredItems = cart) {
     let total = 0;
     let html = "";
 
-    cart.forEach((item, index) => {
-        let itemTotal = item.price * item.quantity;
+    filteredItems.forEach((item, index) => {
+        let itemTotal = (item.price + item.sizePrice + item.extrasPrice) * item.quantity;
 
         html += `
         <div>
-            <p>${item.name} - ₹${item.price} x ${item.quantity} = ₹${itemTotal}</p>
-            <button onclick="increaseQty(${index})">+</button>
-            <button onclick="decreaseQty(${index})">-</button>
+        <p>
+        ${item.name} (${item.size}) - ₹${item.price}
+        + ₹${item.sizePrice} (size)
+        + ₹${item.extrasPrice} (extras)
+        x ${item.quantity}
+        = ₹${itemTotal}
+        </p>
+        <button onclick="increaseQty(${index})">+</button>
+        <button onclick="decreaseQty(${index})">-</button>
         </div>
         `;
 
         total += itemTotal;
     });
 
-    const cartCountEl = document.getElementById("cart-count");
-    if (cartCountEl) cartCountEl.innerText = cart.length;
-
     document.getElementById("cart-items").innerHTML = html;
     document.getElementById("cart-count").innerText = cart.length;
     document.getElementById("total").innerText = "Total: ₹" + total;
+}
+
+/* ================= SEARCH ================= */
+
+function initSearch() {
+    const searchInput = document.getElementById("search");
+
+    if (!searchInput) return;
+
+    searchInput.addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+
+        let filtered = cart.filter(item =>
+            item.name.toLowerCase().includes(value)
+        );
+
+        displayCart(filtered);
+    });
 }
 
 /* ================= CHECKOUT ================= */
@@ -119,7 +163,11 @@ function checkout() {
         for (let i = 0; i < item.quantity; i++) {
             expandedItems.push({
                 name: item.name,
-                price: item.price
+                price: item.price,
+                size: item.size,
+                sizePrice: item.sizePrice,
+                extras: item.extras,
+                extrasPrice: item.extrasPrice
             });
         }
     });
@@ -134,9 +182,36 @@ function checkout() {
             items: expandedItems
         })
     })
+
     .then(res => res.json())
     .then(data => {
-        showToast(`🎉 Order placed! ID: ${data.order_id}`);
+
+        if (!data.order_id) {
+            showToast("❌ Order failed");
+            return;
+        }
+
+        let bill = "🧾 BILL\n\n";
+
+        cart.forEach(item => {
+            let itemTotal = (item.price + item.sizePrice + item.extrasPrice) * item.quantity;
+
+            bill += `${item.name} (${item.size}) x ${item.quantity}\n`;
+            bill += `₹${item.price} + ₹${item.sizePrice} + ₹${item.extrasPrice} = ₹${itemTotal}\n\n`;
+        });
+
+        bill += "---------------------\n";
+
+        let finalTotal = 0;
+
+        cart.forEach(item => {
+            finalTotal += (item.price + item.sizePrice + item.extrasPrice) * item.quantity;
+        });
+
+        bill += "Total: ₹" + finalTotal;
+
+        alert(bill);
+
         cart = [];
         displayCart();
     })
